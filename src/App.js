@@ -1,11 +1,15 @@
-import { Box, FormControl, FormLabel, FormHelperText, Button, Input, Container, Heading, Flex } from "@chakra-ui/react";
+import { Box, Container, Heading } from "@chakra-ui/react";
 import { useState } from "react";
+import BmiForm from "./components/BmiForm";
+import ImageResult from "./components/ImageResult";
 
 function App() {
   const [values, setValues] = useState({
     weight: "",
     height: ""
   });
+
+  const [ bmi, setBmi ] = useState(0);
 
   const [error, setError] = useState({});
 
@@ -19,11 +23,16 @@ function App() {
   const submitHandler = (e) => {
     e.preventDefault();
     setError(Validation());
-    setValues({
-      weight: "",
-      height: ""
-    });
-    console.log(values.weight, values.height);
+    if(values.weight && values.height) {
+      setValues({
+        weight: "",
+        height: ""
+      });
+    }
+    setBmi(
+      (values.weight / ( values.height * values.height )) * 703
+    )
+    console.log('the bmi is: ', bmi);
   }
 
   const reloadHandler = () => {
@@ -48,45 +57,12 @@ function App() {
   }
 
   return (
-    <Container>
-      <Box boxShadow='lg' p='6' rounded='md'>
-        <Heading as='h1' fontSize='30px' my='20px' align='center'>Form with Validation</Heading>
-        <form onSubmit={ submitHandler }>
-          <FormControl mb='20px'>
-            <FormLabel>Weight(lbs)</FormLabel>
-            <Input type='text' 
-              name="weight"
-              value={values.weight} 
-              onChange={ changeHandler } 
-              placeholder="weight" />
-            {
-              error.weight && 
-              <FormHelperText>{error.weight}</FormHelperText>
-            }
-          </FormControl>
+    <Container maxW='3xl' mt='30px'>
+      <Box boxShadow='lg' p='6' rounded='md' bg='white'>
+        <Heading as='h1' fontSize='72px' mb='20px' color='#ec1839' align='center'>BMI Calculator</Heading>
+        <BmiForm values={values} changeHandler={changeHandler} error={error} reloadHandler={reloadHandler} submitHandler={submitHandler} />
 
-          <FormControl mb='20px'>
-            <FormLabel>Height(in)</FormLabel>
-            <Input type='text' 
-              name="height"
-              value={values.height} 
-              onChange={ changeHandler }
-              placeholder="height" />
-            {
-              error.height &&
-              <FormHelperText>{error.height}</FormHelperText>
-            }            
-          </FormControl>
-          
-          <Flex justifyContent='space-between' mb='20px'>
-            <Button type="button" px='50px' onClick={ reloadHandler }>Reload</Button>
-            <Button type="submit" px='50px'>Submit</Button>
-          </Flex>
-
-          <Flex justifyContent='center'>
-            Your BMI is:
-          </Flex>
-        </form>
+        <ImageResult bmi={bmi} />
       </Box>
     </Container>
   );
