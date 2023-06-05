@@ -4,7 +4,7 @@ const BmiForm = ({values, changeHandler, error, reloadHandler, submitHandler}) =
     return (
         <form onSubmit={ submitHandler }>
           <FormControl mb='20px'>
-            <FormLabel>Weight(KGs)</FormLabel>
+            <FormLabel>Weight (Lbs)</FormLabel>
             <Input type='text' 
               name="weight"
               value={values.weight} 
@@ -14,10 +14,11 @@ const BmiForm = ({values, changeHandler, error, reloadHandler, submitHandler}) =
               error.weight && 
               <FormHelperText>{error.weight}</FormHelperText>
             }
+            <FormHelperText>1 Kg = 2.204 Lbs</FormHelperText>
           </FormControl>
 
           <FormControl mb='20px'>
-            <FormLabel>Height(Inches)</FormLabel>
+            <FormLabel>Height (Inches)</FormLabel>
             <Input type='text' 
               name="height"
               value={values.height} 

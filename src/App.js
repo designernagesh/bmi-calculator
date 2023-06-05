@@ -10,8 +10,9 @@ function App() {
   });
 
   const [ bmi, setBmi ] = useState(0);
-
+  const [ bmiMsg, setBmiMsg ] = useState("");
   const [error, setError] = useState({});
+  const [ showResult, setShowResult ] = useState(false);
 
   const changeHandler = (e) => {
     setValues({
@@ -23,16 +24,10 @@ function App() {
   const submitHandler = (e) => {
     e.preventDefault();
     setError(Validation());
-    if(values.weight && values.height) {
-      setValues({
-        weight: "",
-        height: ""
-      });
-    }
     setBmi(
-      (values.weight / ( values.height * values.height )) * 703
+      (values.weight / (values.height * values.height) * 703).toFixed(1)
     )
-    console.log('the bmi is: ', bmi);
+    setShowResult(true);
   }
 
   const reloadHandler = () => {
@@ -61,8 +56,11 @@ function App() {
       <Box boxShadow='lg' p='6' rounded='md' bg='white'>
         <Heading as='h1' fontSize='72px' mb='20px' color='#ec1839' align='center'>BMI Calculator</Heading>
         <BmiForm values={values} changeHandler={changeHandler} error={error} reloadHandler={reloadHandler} submitHandler={submitHandler} />
-
-        <ImageResult bmi={bmi} />
+        {
+          showResult ?  
+          <ImageResult bmi={bmi} bmiMsg={bmiMsg} setBmiMsg={setBmiMsg} />
+          : ""
+        }
       </Box>
     </Container>
   );
